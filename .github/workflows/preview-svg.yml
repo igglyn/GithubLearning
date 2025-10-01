@@ -7,7 +7,7 @@ permissions:
 on:
   pull_request:
     types:
-      [opened, synchronize]
+      [opened, reopened, synchronize]
     path: 
       - "FAQ.svg"
       
