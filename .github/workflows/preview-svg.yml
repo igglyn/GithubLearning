@@ -21,10 +21,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      
+      - name: 'Install nix'
+        uses: DeterminateSystems/nix-installer-action@v9
+      
+      - name: 'Create PNG'
+        if: steps.restore-nix-store.outputs.cache-hit != 'true'
+        run: |
+          nix-shell -p firefox --command "firefox -screenshot file://\$(realpath FAQ.svg) --window-size 1280,720"
 
       - name: 'Send Preview'
         run: |
-          gh pr comment $PRNUM --body-file FAQ.svg
+          gh pr comment $PRNUM --body-file screenshot.png
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
