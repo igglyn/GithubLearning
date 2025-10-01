@@ -24,14 +24,23 @@ jobs:
       
       - name: 'Install nix'
         uses: DeterminateSystems/nix-installer-action@v9
-      
+
+      - name: Setup firefox
+        id: setup-firefox
+        uses: browser-actions/setup-firefox@v1
+        with:
+          firefox-version: "latest"
+      - run: |
+          echo Installed firefox versions: ${{ steps.setup-firefox.outputs.firefox-version }}
+          ${{ steps.setup-firefox.outputs.firefox-path }} --version
+
       - name: 'Create PNG'
         run: |
-          selenium -screenshot file://$(realpath FAQ.svg) --window-size 1280,720
+          ${{ steps.setup-firefox.outputs.firefox-path }} -screenshot file://$(realpath FAQ.svg) --window-size 1280,720
 
       - name: 'Send Preview'
         run: |
-          gh pr comment $PRNUM --body-file screenshot.png
+          gh pr comment $PRNUM --body "bwaa"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
