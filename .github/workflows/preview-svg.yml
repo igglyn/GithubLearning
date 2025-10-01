@@ -21,18 +21,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
-      - name: 'Install nix'
-        uses: DeterminateSystems/nix-installer-action@v9
 
       - name: Setup firefox
         id: setup-firefox
         uses: browser-actions/setup-firefox@v1
         with:
           firefox-version: "latest"
-      - run: |
-          echo Installed firefox versions: ${{ steps.setup-firefox.outputs.firefox-version }}
-          ${{ steps.setup-firefox.outputs.firefox-path }} --version
 
       - name: 'Create PNG'
         run: |
