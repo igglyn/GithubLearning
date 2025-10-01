@@ -26,9 +26,8 @@ jobs:
         uses: DeterminateSystems/nix-installer-action@v9
       
       - name: 'Create PNG'
-        if: steps.restore-nix-store.outputs.cache-hit != 'true'
         run: |
-          nix-shell -p firefox --command "firefox -screenshot file://\$(realpath FAQ.svg) --window-size 1280,720"
+          selenium -screenshot file://\$(realpath FAQ.svg) --window-size 1280,720
 
       - name: 'Send Preview'
         run: |
