@@ -1,0 +1,36 @@
+name: create-png
+run-name: Creating PNG from SVG
+
+permissions: 
+  contents: write
+
+on:
+  pull_request:
+    types:
+      [opened, synchronize]
+    path: 
+      - "FAQ.svg"
+      
+jobs:
+  send-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'checkout repo'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 'Install nix'
+        uses: DeterminateSystems/nix-installer-action@v9
+      
+      - name: 'Create PNG'
+        run: |
+          nix-shell -p firefox --command "firefox -screenshot file://\$(realpath FAQ.svg) --window-size 1280,720"
+
+      - name: 'Send Preview'
+        run: |
+          gh pr comment $PRNUM --body-file screenshot.png
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          PRNUM: ${{ github.event.pull_request.number }}
