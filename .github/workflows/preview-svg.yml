@@ -27,7 +27,7 @@ jobs:
       
       - name: 'Create PNG'
         run: |
-          selenium -screenshot file://\$(realpath FAQ.svg) --window-size 1280,720
+          selenium -screenshot file://$(realpath FAQ.svg) --window-size 1280,720
 
       - name: 'Send Preview'
         run: |
